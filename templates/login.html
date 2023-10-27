@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Inicio de sesión</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Agrega tu propio archivo CSS para personalizar el diseño -->
+    <script src="https://kit.fontawesome.com/ed7274d2ff.js" crossorigin="anonymous"></script>
+    <style>
+        /* Estilos personalizados */
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" style="width: 100px; height: 100px;" class="me-2">
+                UPVT
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary btn-login boton-gris" href="{{ url_for('login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-success btn-login boton-gris" href="{{ url_for('formulario') }}">Registrar</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Inicio de sesión</h5>
+                       <center><img src="{{ url_for('static', filename='logo.jpg') }}" alt="logo" class="img-fluid mb-3" style="max-width: 150px; max-height: 150px;"></center> 
+                        <form method="post">
+                            <div class="mb-3">
+                                <label for="id_login" class="form-label"><i class="fa-regular fa-user"></i>Matrícula</label>
+                                <input type="text" class="form-control" id="id_login" name="id_login" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contra" class="form-label"><i class="fa-solid fa-lock"></i>Contraseña:</label>
+                                <input type="password" class="form-control" id="contra" name="contra" required>
+                            </div>
+                            <center><button type="submit" class="btn btn-primary">Iniciar sesión</button><br><br></center>
+                            <center><a href="{{ url_for('formulario') }}" class="btn btn-primary">Registrar</a></center>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>

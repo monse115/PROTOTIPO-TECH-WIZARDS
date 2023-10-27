@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Problemas Matemáticos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Estilos CSS personalizados */
+        body {
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .main-container {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #0074d9;
+        }
+
+        label {
+            font-size: 18px;
+        }
+
+        select {
+            font-size: 18px;
+        }
+
+        .problem {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f5f5f5;
+        }
+
+        .problem p {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #0074d9;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            margin-top: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #results {
+            font-size: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+         /* Estilos para la barra de navegación */
+         .navbar {
+            background-color: #333;
+        }
+
+        .navbar-brand {
+            color: #fff !important;
+            font-size: 24px;
+        }
+
+        .nav-item {
+            margin-right: 20px;
+        }
+
+        .btn-login {
+            background-color: #28a745 !important;
+        }
+
+        .boton-gris {
+            background-color: #ccc !important;
+            color: #333 !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" style="width: 100px; height: 100px;" class="me-2">
+                UPVT
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link btn btn-success btn-login boton-gris" href="{{ url_for('index') }}">Salir</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container text-center main-container">
+        <h1 class="mt-4">Problemas Matemáticos</h1>
+        
+        <div class="container" style="margin-top: 20px;">
+            <div class="form-group row">
+                <label for="nivel" class="col-sm-2 col-form-label">Nivel:</label>
+                <div class="col-sm-4">
+                    <select id="nivel" class="form-control" onchange="loadProblems()">
+                        <option value="primaria">Primaria</option>
+                        <option value="secundaria">Secundaria</option>
+                    </select>
+                </div>
+                <label for="dificultad" class="col-sm-2 col-form-label text-center">Dificultad:</label>
+                <div class="col-sm-4">
+                    <select id="dificultad" class="form-control" onchange="loadProblems()">
+                        <option value="facil">Fácil</option>
+                        <option value="intermedio">Intermedio</option>
+                        <option value="dificil">Difícil</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <h2 class="mt-4" style="margin-top: 20px; font-family: 'Arial', sans-serif; font-size: 28px;">Resuelve el siguiente problema:</h2>
+        <div id="problems"></div>
+        <div id="results" class="mt-4"></div>        
+    </div>
+        
+    <script>
+        const problemasFacilesPrimaria = [
+            {
+                enunciado: "En una granja, hay 5 patos en un estanque y 3 patos en otro. ¿Cuántos patos hay en total?",
+                respuesta: "8"
+            },
+            {
+                enunciado: "Si tienes 10 dulces y das 3 a tu amigo, ¿cuántos dulces te quedan?",
+                respuesta: "7"
+            },
+            {
+                enunciado: "Si tienes 4 cajas de galletas y cada caja tiene 6 galletas, ¿cuántas galletas tienes en total?",
+                respuesta: "24"
+            },
+            {
+            enunciado: "Si tienes 2 manzanas y comes una, ¿cuántas manzanas te quedan?",
+            respuesta: "1"
+            },
+            {
+                enunciado: "Si tienes 8 chocolates y das 3 a tu hermano, ¿cuántos chocolates te quedan?",
+                respuesta: "5"
+            },
+            {
+                enunciado: "Calcula el producto de 5 y 4.",
+                respuesta: "20"
+            },
+            {
+                enunciado: "Si tienes 6 bollos y comes 2, ¿cuántos bollos te quedan?",
+                respuesta: "4"
+            },
+            {
+                enunciado: "Resuelve: 9 + 6 - 3.",
+                respuesta: "12"
+            },
+            {
+                enunciado: "Calcula el área de un cuadrado con lados de 7 cm.",
+                respuesta: "49 cm²"
+            },
+            {
+                enunciado: "Divide 18 por 3.",
+                respuesta: "6"
+            },
+            {
+                enunciado: "Si compras 3 juguetes por $10 cada uno, ¿cuánto pagarás en total?",
+                respuesta: "$30"
+            },
+            {
+                enunciado: "Resuelve: 15 - 7.",
+                respuesta: "8"
+            },
+            {
+                enunciado: "Calcula el área de un triángulo con base de 5 cm y altura de 4 cm.",
+                respuesta: "10 cm²"
+            }
+            ];
+
+        const problemasIntermediosPrimaria = [
+            {
+                enunciado: "Si tienes una pizza y comes 2/8 de ella, ¿qué fracción de la pizza queda?",
+                respuesta: "6/8"
+            },
+            {
+                enunciado: "Si tienes 3 camisetas y cada camiseta cuesta $5, ¿cuánto pagarías en total?",
+                respuesta: "$15"
+            },
+            {
+                enunciado: "Encuentra el perímetro de un rectángulo con longitud 8 cm y ancho 5 cm.",
+                respuesta: "26 cm"
+            },
+            {
+            enunciado: "Si compras 4 libros por $7 cada uno, ¿cuánto pagarás en total?",
+            respuesta: "$28"
+            },
+            {
+                enunciado: "Calcula el área de un cuadrado con lados de 9 cm.",
+                respuesta: "81 cm²"
+            },
+            {
+                enunciado: "Resuelve: 15 ÷ 5.",
+                respuesta: "3"
+            },
+            {
+                enunciado: "Calcula el volumen de un cubo con arista de 6 cm.",
+                respuesta: "216 cm³"
+            },
+            {
+                enunciado: "Resuelve: 2 + 3 x 4.",
+                respuesta: "14"
+            },
+            {
+                enunciado: "Calcula el área de un círculo con radio de 8 cm (usa π ≈ 3.14).",
+                respuesta: "Área ≈ 201.06 cm²"
+            },
+            {
+                enunciado: "Divide 35 por 7.",
+                respuesta: "5"
+            },
+            {
+                enunciado: "Si tienes 20 bollos y comes 6, ¿cuántos bollos te quedan?",
+                respuesta: "14"
+            },
+            {
+                enunciado: "Resuelve: 18 - 9.",
+                respuesta: "9"
+            },
+            {
+                enunciado: "Calcula el área de un triángulo con base de 8 cm y altura de 7 cm.",
+                respuesta: "28 cm²"
+            }
+        ];
+
+        const problemasDificilesPrimaria = [
+            {
+                enunciado: "Si 4 bollos cuestan $8, ¿cuánto costarán 7 bollos?",
+                respuesta: "$14"
+            },
+            {
+                enunciado: "Calcula el área de un triángulo con base de 10 cm y altura de 6 cm.",
+                respuesta: "30 cm²"
+            },
+            {
+                enunciado: "Divide 256 por 8.",
+                respuesta: "32"
+            },
+            {
+            enunciado: "Si compras 5 refrescos por $2.50 cada uno, ¿cuánto pagarás en total?",
+            respuesta: "$12.50"
+            },
+            {
+                enunciado: "Resuelve: (12 ÷ 3) x 2.",
+                respuesta: "8"
+            },
+            {
+                enunciado: "Calcula el área de un círculo con radio de 6 cm (usa π ≈ 3.14).",
+                respuesta: "Área ≈ 113.04 cm²"
+            },
+            {
+                enunciado: "Si tienes 50 stickers y pegas 3 en tu álbum, ¿cuántos stickers te quedan?",
+                respuesta: "47"
+            },
+            {
+                enunciado: "Resuelve: 2 x 5 + 8.",
+                respuesta: "18"
+            },
+            {
+                enunciado: "Calcula el volumen de un prisma rectangular con longitud 10 cm, ancho 4 cm y altura 6 cm.",
+                respuesta: "Volumen = 240 cm³"
+            },
+            {
+                enunciado: "Divide 63 por 9.",
+                respuesta: "7"
+            },
+            {
+                enunciado: "Si compras 3 camisetas por $15 cada una, ¿cuánto pagarás en total?",
+                respuesta: "$45"
+            },
+            {
+                enunciado: "Resuelve: 25 - 13.",
+                respuesta: "12"
+            },
+            {
+                enunciado: "Calcula el área de un rectángulo con longitud 9 cm y ancho 5 cm.",
+                respuesta: "45 cm²"
+        }
+        ];
+
+        const problemasFacilesSecundaria = [
+            {
+                enunciado: "Resuelve la ecuación: 3x + 4 = 16",
+                respuesta: "x = 4"
+            },
+            {
+                enunciado: "Calcula el área de un círculo con radio de 5 cm (usa π ≈ 3.14)",
+                respuesta: "Área ≈ 78.5 cm²"
+            },
+            {
+                enunciado: "Simplifica la fracción: 12/18",
+                respuesta: "2/3"
+            },
+            {
+            enunciado: "Resuelve la ecuación: 5x - 3 = 12",
+            respuesta: "x = 3"
+            },
+            {
+                enunciado: "Calcula el área de un círculo con radio de 4 cm (usa π ≈ 3.14).",
+                respuesta: "Área ≈ 50.24 cm²"
+            },
+            {
+                enunciado: "Simplifica la fracción: 15/20",
+                respuesta: "3/4"
+            },
+            {
+                enunciado: "Calcula el volumen de una pirámide con base cuadrada de 6 cm de lado y altura 8 cm.",
+                respuesta: "Volumen = 192 cm³"
+            },
+            {
+                enunciado: "Resuelve: 3 + 2 x 5.",
+                respuesta: "13"
+            },
+            {
+                enunciado: "Calcula el área de un triángulo con base de 6 cm y altura 10 cm.",
+                respuesta: "30 cm²"
+            },
+            {
+                enunciado: "Divide 24 por 4.",
+                respuesta: "6"
+            },
+            {
+                enunciado: "Si compras 4 hamburguesas por $5 cada una, ¿cuánto pagarás en total?",
+                respuesta: "$20"
+            },
+            {
+                enunciado: "Resuelve: 14 - 7.",
+                respuesta: "7"
+            },
+            {
+                enunciado: "Calcula el área de un círculo con radio de 9 cm (usa π ≈ 3.14).",
+                respuesta: "Área ≈ 254.34 cm²"
+            }
+        ];
+
+        const problemasIntermediosSecundaria = [
+            {
+                enunciado: "Resuelve el sistema de ecuaciones:\n3x + 2y = 12\n2x - y = 1",
+                respuesta: "x = 3, y = 6"
+            },
+            {
+                enunciado: "Calcula el área de un triángulo con base de 12 cm y altura de 8 cm.",
+                respuesta: "48 cm²"
+            },
+            {
+                enunciado: "Resuelve la ecuación cuadrática: x^2 - 5x + 6 = 0",
+                respuesta: "x = 2, x = 3"
+            },
+            {
+            enunciado: "Resuelve el sistema de ecuaciones:\n2x + 3y = 14\n3x - y = 5",
+            respuesta: "x = 3, y = 2"
+            },
+            {
+                enunciado: "Calcula el área de un triángulo con base de 10 cm y altura de 6 cm.",
+                respuesta: "30 cm²"
+            },
+            {
+                enunciado: "Resuelve la ecuación cuadrática: x^2 - 9x + 20 = 0",
+                respuesta: "x = 4, x = 5"
+            },
+            {
+                enunciado: "Calcula el volumen de un cono con radio de 5 cm y altura de 12 cm (usa π ≈ 3.14).",
+                respuesta: "Volumen ≈ 314.16 cm³"
+            },
+            {
+                enunciado: "Resuelve: 6 x (4 - 2).",
+                respuesta: "12"
+            },
+            {
+                enunciado: "Calcula el área de un círculo con radio de 12 cm (usa π ≈ 3.14).",
+                respuesta: "Área ≈ 452.16 cm²"
+            },
+            {
+                enunciado: "Divide 48 por 6.",
+                respuesta: "8"
+            },
+            {
+                enunciado: "Si compras 5 camisetas por $12 cada una, ¿cuánto pagarás en total?",
+                respuesta: "$60"
+            },
+            {
+                enunciado: "Resuelve: 16 - 9.",
+                respuesta: "7"
+            },
+            {
+                enunciado: "Calcula el área de un triángulo con base de 9 cm y altura de 8 cm.",
+                respuesta: "36 cm²"
+            }
+        ];
+
+        const problemasDificilesSecundaria = [
+            {
+                enunciado: "Calcula el volumen de un cilindro con radio de 7 cm y altura de 10 cm (usa π ≈ 3.14)",
+                respuesta: "Volumen ≈ 1539.76 cm³"
+            },
+            {
+                enunciado: "Resuelve la desigualdad: 2x - 3 > 7",
+                respuesta: "x > 5"
+            },
+            {
+                enunciado: "Si 6 libros cuestan $60, ¿cuánto costarán 15 libros?",
+                respuesta: "$150"
+            },
+            {
+            enunciado: "Calcula el volumen de una esfera con radio de 6 cm (usa π ≈ 3.14).",
+            respuesta: "Volumen ≈ 904.32 cm³"
+            },
+            {
+                enunciado: "Resuelve la desigualdad: 3x - 5 > 10",
+                respuesta: "x > 5"
+            },
+            {
+                enunciado: "Si 8 camisetas cuestan $80, ¿cuánto costarán 5 camisetas?",
+                respuesta: "$50"
+            },
+            {
+                enunciado: "Calcula el área de un rectángulo con longitud 11 cm y ancho 4 cm.",
+                respuesta: "44 cm²"
+            },
+            {
+                enunciado: "Resuelve: (4 + 3) x 2 - 5.",
+                respuesta: "9"
+            },
+            {
+                enunciado: "Calcula el volumen de un cilindro con radio de 8 cm y altura de 15 cm (usa π ≈ 3.14).",
+                respuesta: "Volumen ≈ 3014.08 cm³"
+            },
+            {
+                enunciado: "Divide 75 por 5.",
+                respuesta: "15"
+            },
+            {
+                enunciado: "Si compras 6 pizzas por $10 cada una, ¿cuánto pagarás en total?",
+                respuesta: "$60"
+            },
+            {
+                enunciado: "Resuelve: 20 - (5 x 2).",
+                respuesta: "10"
+            },
+            {
+                enunciado: "Calcula el área de un triángulo con base de 14 cm y altura de 9 cm.",
+                respuesta: "63 cm²"
+            }
+        ];
+
+        let currentProblem = 0;
+        let problemas = [];
+
+        function loadProblems() {
+            const nivel = document.getElementById("nivel").value;
+            const dificultad = document.getElementById("dificultad").value;
+
+            if (nivel === "primaria") {
+                problemas = (dificultad === "facil") ? problemasFacilesPrimaria :
+                            (dificultad === "intermedio") ? problemasIntermediosPrimaria :
+                            problemasDificilesPrimaria;
+            } else if (nivel === "secundaria") {
+                problemas = (dificultad === "facil") ? problemasFacilesSecundaria :
+                            (dificultad === "intermedio") ? problemasIntermediosSecundaria :
+                            problemasDificilesSecundaria;
+            }
+
+            currentProblem = 0;
+            displayProblem();
+        }
+
+        function displayProblem() {
+            const problemsContainer = document.getElementById("problems");
+            const problemDiv = document.createElement("div");
+            problemDiv.classList.add("problem");
+            problemDiv.innerHTML = `
+                <p>${currentProblem + 1}. ${problemas[currentProblem].enunciado}</p>
+                <input type="text" id="problem${currentProblem + 1}" placeholder="Respuesta">
+                <button onclick="checkAnswer()">Verificar</button>
+            `;
+            problemsContainer.innerHTML = "";
+            problemsContainer.appendChild(problemDiv);
+        }
+
+
+        function showMessage(message, isCorrect) {
+        const results = document.getElementById("results");
+        const messageElement = document.createElement("p");
+        if (isCorrect) {
+            messageElement.style.color = "green"; // Cambiar a verde si es correcto
+        } else {
+            messageElement.style.color = "red"; // Cambiar a rojo si es incorrecto
+        }
+        messageElement.textContent = message;
+        results.appendChild(messageElement);
+    }
+
+
+    function checkAnswer() {
+    const answer = document.getElementById(`problem${currentProblem + 1}`).value;
+    const results = document.getElementById("results");
+
+    // Borramos los mensajes anteriores
+    results.innerHTML = "";
+
+    if (answer === problemas[currentProblem].respuesta) {
+        showMessage(`Problema ${currentProblem + 1}: Correcto.`, true);
+        currentProblem++;
+
+        if (currentProblem < problemas.length) {
+            displayProblem();
+        } else {
+            showMessage("¡Todos los problemas han sido resueltos!", true);
+
+            // Mensaje de finalización
+            if (dificultad === "facil") {
+                showMessage("¡Has completado todos los problemas fáciles en este nivel!", true);
+            } else if (dificultad === "intermedio") {
+                showMessage("¡Has completado todos los problemas intermedios en este nivel!", true);
+            } else if (dificultad === "dificil") {
+                showMessage("¡Has completado todos los problemas difíciles en este nivel!", true);
+            }
+        }
+    } else {
+        showMessage(`Problema ${currentProblem + 1}: Incorrecto. Por favor, inténtalo de nuevo.`, false);
+    }
+}
+
+        // Carga los problemas del nivel predeterminado al cargar la página
+        loadProblems();
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
